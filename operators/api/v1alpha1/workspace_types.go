@@ -29,6 +29,9 @@ type WorkspaceSpec struct {
 	// The human-readable name of the Workspace.
 	PrettyName string `json:"prettyName"`
 
+	// AutoEnroll capability definition. If omitted, no autoenroll features will be added.
+	AutoEnroll WorkspaceAutoenroll `json:"autoEnroll,omitempty"`
+
 	// The amount of resources associated with this workspace, and inherited by enrolled tenants.
 	Quota WorkspaceResourceQuota `json:"quota"`
 }
@@ -50,6 +53,16 @@ type WorkspaceStatus struct {
 	// occurred. In case of errors, the other status fields provide additional
 	// information about which problem occurred.
 	Ready bool `json:"ready,omitempty"`
+}
+
+// WorkspaceAutoenroll defines auto-enroll capabilities of the Workspace.
+type WorkspaceAutoenroll struct {
+	// Whether a Tenant can ask to join the Workspace.
+	EnableEnrollRequest bool `json:"enableEnrollRequest"`
+
+	// Whether the request is completed immediately or it has to be approved
+	// by a Workspace Manager.
+	SelfEnroll bool `json:"selfEnroll"`
 }
 
 // WorkspaceResourceQuota defines the resource quota for each Workspace.
