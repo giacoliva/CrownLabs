@@ -57,8 +57,8 @@ type WorkspaceStatus struct {
 
 // WorkspaceAutoenroll defines auto-enroll capabilities of the Workspace.
 type WorkspaceAutoenroll struct {
-	// Whether a Tenant can ask to join the Workspace.
-	EnableEnrollRequest bool `json:"enableEnrollRequest"`
+	// Whether the autoenroll feature is enabled or not.
+	Enabled bool `json:"enabled"`
 
 	// Whether the request is completed immediately or it has to be approved
 	// by a Workspace Manager.

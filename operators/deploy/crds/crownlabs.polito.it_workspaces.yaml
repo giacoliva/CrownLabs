@@ -52,6 +52,16 @@ spec:
               prettyName:
                 description: The human-readable name of the Workspace.
                 type: string
+              autoEnroll:
+                description: AutoEnroll capability definition. If omitted, no autoenroll features will be added.
+                properties:
+                  enabled:
+                    description: Whether the autoenroll feature is enabled or not.
+                    type: boolean
+                  selfEnroll:
+                    description: Whether the request is completed immediately or it has to be approved by a Workspace Manager.
+                    type: boolean
+                type: object
               quota:
                 description: The amount of resources associated with this workspace,
                   and inherited by enrolled tenants.

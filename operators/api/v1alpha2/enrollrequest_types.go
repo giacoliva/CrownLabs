@@ -5,8 +5,7 @@ import (
 )
 
 type EnrollRequestSpec struct {
-	Workspace string `json:"workspace"`
-	Tenant    string `json:"tenant"`
+	Tenant string `json:"tenant"`
 }
 
 type EnrollRequestStatus struct {
@@ -22,6 +21,14 @@ type EnrollRequest struct {
 	Status EnrollRequestStatus `json:"status,omitempty"`
 }
 
+// +kubebuilder:object:root=true
+type EnrollRequestList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+
+	Items []EnrollRequest `json:"items"`
+}
+
 func init() {
-	SchemeBuilder.Register(&EnrollRequest{})
+	SchemeBuilder.Register(&EnrollRequest{}, &EnrollRequestList{})
 }
