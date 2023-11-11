@@ -54,3 +54,6 @@ const WorkspaceLabelPrefix = "crownlabs.polito.it/workspace-"
 
 // TnOperatorFinalizerName is the name of the finalizer corresponding to the tenant operator.
 const TnOperatorFinalizerName = "crownlabs.polito.it/tenant-operator"
+
+// TnOperatorErFinalizerName is the name of the finalizer corresponding to the tenant operator for enroll requests.
+const TnOperatorErFinalizerName = "crownlabs.polito.it/tenant-operator-er"

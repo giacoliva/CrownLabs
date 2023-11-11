@@ -19,9 +19,6 @@ spec:
     - jsonPath: .spec.tenant
       name: Tenant
       type: string
-    - jsonPath: .status.valid
-      name: Valid
-      type: boolean
     name: v1alpha2
     schema:
       openAPIV3Schema:

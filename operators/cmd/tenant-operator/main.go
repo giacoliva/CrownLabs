@@ -203,7 +203,9 @@ func main() {
 		log.Error(err, "Unable to create controller", "controller", "workspace")
 		os.Exit(1)
 	}
-	if err = (&controllers.EnrollRequestReconciler{}).SetupWithManager(mgr); err != nil {
+	if err = (&controllers.EnrollRequestReconciler{
+		Client: mgr.GetClient(),
+	}).SetupWithManager(mgr); err != nil {
 		log.Error(err, "Unable to create controller", "controller", "workspace")
 		os.Exit(1)
 	}

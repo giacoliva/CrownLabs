@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -47,6 +48,12 @@ func (erm *EnrollRequestMutator) Handle(ctx context.Context, req admission.Reque
 		return admission.Errored(http.StatusBadRequest, err)
 	}
 
+	if !erm.CheckValidWorkspace(req.Namespace) {
+		err := fmt.Errorf("namespace %s is not a workspace namespace", req.Namespace)
+		log.Error(err, "namespace check failed")
+		return admission.Errored(http.StatusBadRequest, err)
+	}
+
 	return erm.CreatePatchResponse(ctx, &req, enrollrequest)
 }
 
@@ -77,6 +84,10 @@ func (erm *EnrollRequestMutator) CheckName(log logr.Logger, enrollrequest *clv1a
 func (erm *EnrollRequestMutator) InjectTenant(log logr.Logger, enrollrequest *clv1alpha2.EnrollRequest, username string) {
 	enrollrequest.Spec.Tenant = username
 	log.V(utils.LogDebugLevel).Info("tenant injected", "tenant", enrollrequest.Spec.Tenant)
+}
+
+func (r *EnrollRequestMutator) CheckValidWorkspace(namespace string) bool {
+	return strings.HasPrefix(namespace, "workspace-")
 }
 
 func (erm *EnrollRequestMutator) CreatePatchResponse(ctx context.Context, req *admission.Request, enrollrequest *clv1alpha2.EnrollRequest) admission.Response {
