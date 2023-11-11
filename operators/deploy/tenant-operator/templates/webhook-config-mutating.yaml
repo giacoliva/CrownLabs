@@ -23,4 +23,23 @@ webhooks:
       path: /mutate-v1alpha2-tenant
       port: 443
   sideEffects: None
+- name: mutate.enrollrequest.crownlabs.polito.it
+  failurePolicy: Fail
+  admissionReviewVersions:
+  - v1
+  rules:
+  - apiGroups:   ["crownlabs.polito.it"]
+    apiVersions: ["v1alpha2"]
+    operations:  ["CREATE","UPDATE"]
+    resources:   ["enrollrequests"]
+    scope:       "Namespaced"
+  clientConfig:
+    service:
+      name: {{ include "tenant-operator.webhookname" . }}
+      namespace: {{ .Release.Namespace }}
+      path: /mutate-v1alpha2-enrollrequest
+      port: 443
+  sideEffects: None
+{{ end }}
+{{ if .Values.webhook.enableValidating }}
 {{ end }}

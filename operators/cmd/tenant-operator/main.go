@@ -47,6 +47,8 @@ const (
 	ValidatingWebhookPath = "/validate-v1alpha2-tenant"
 	// MutatingWebhookPath -> path on which the mutating webhook will be bound. Has to match the one set in the MutatingWebhookConfiguration.
 	MutatingWebhookPath = "/mutate-v1alpha2-tenant"
+	// EnrollRequestMutatingWebhookPath -> path on which the mutating webhook for enroll requests will be bound. Has to match the one set in the MutatingWebhookConfiguration.
+	EnrollRequestMutatingWebhookPath = "/mutate-v1alpha2-enrollrequest"
 )
 
 func init() {
@@ -146,6 +148,7 @@ func main() {
 		webhookBypassGroupsList := strings.Split(webhookBypassGroups, ",")
 		hookServer.Register(ValidatingWebhookPath, tenantwh.MakeTenantValidator(mgr.GetClient(), webhookBypassGroupsList))
 		hookServer.Register(MutatingWebhookPath, tenantwh.MakeTenantMutator(mgr.GetClient(), webhookBypassGroupsList, targetLabelKey, targetLabelValue, baseWorkspacesList))
+		hookServer.Register(EnrollRequestMutatingWebhookPath, tenantwh.MakeEnrollRequestMutator(mgr.GetClient()))
 	} else {
 		log.Info("Webhook set up: operation skipped")
 	}
@@ -197,6 +200,10 @@ func main() {
 		RequeueTimeMinimum: requeueTimeMinimum,
 		RequeueTimeMaximum: requeueTimeMaximum,
 	}).SetupWithManager(mgr); err != nil {
+		log.Error(err, "Unable to create controller", "controller", "workspace")
+		os.Exit(1)
+	}
+	if err = (&controllers.EnrollRequestReconciler{}).SetupWithManager(mgr); err != nil {
 		log.Error(err, "Unable to create controller", "controller", "workspace")
 		os.Exit(1)
 	}
